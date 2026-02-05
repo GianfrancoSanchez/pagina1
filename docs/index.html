@@ -242,6 +242,90 @@
         </div>
     </section>
 
+    <!-- Modal de Adopción -->
+    <div id="adoptionModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Formulario de Adopción</h2>
+            <p class="modal-subtitle">Completa la información para adoptar a tu nuevo amigo</p>
+            
+            <form id="adoptionForm" class="adoption-form">
+                <div class="form-group">
+                    <label for="dogName">Perro seleccionado:</label>
+                    <input type="text" id="dogName" name="dogName" readonly>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fullName">Nombre completo *</label>
+                        <input type="text" id="fullName" name="fullName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="age">Edad *</label>
+                        <input type="number" id="age" name="age" min="21" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Correo electrónico *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Teléfono *</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Dirección completa *</label>
+                    <input type="text" id="address" name="address" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="housing">Tipo de vivienda *</label>
+                    <select id="housing" name="housing" required>
+                        <option value="">Seleccione una opción</option>
+                        <option value="propia">Casa propia</option>
+                        <option value="alquilada">Casa alquilada (con permiso)</option>
+                        <option value="apartamento">Apartamento</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="experience">¿Tienes experiencia con perros? *</label>
+                    <select id="experience" name="experience" required>
+                        <option value="">Seleccione una opción</option>
+                        <option value="si">Sí</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="otherPets">¿Tienes otras mascotas en casa?</label>
+                    <input type="text" id="otherPets" name="otherPets" placeholder="Ej: 1 gato, 2 perros">
+                </div>
+
+                <div class="form-group">
+                    <label for="reason">¿Por qué quieres adoptar? *</label>
+                    <textarea id="reason" name="reason" rows="4" required></textarea>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="termsAccepted" name="termsAccepted" required>
+                        Acepto los términos y condiciones de adopción
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-submit">Enviar Solicitud</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer id="contacto" class="footer">
         <div class="container">
@@ -271,5 +355,64 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        // Obtener el modal
+        const modal = document.getElementById('adoptionModal');
+        const closeBtn = document.querySelector('.close');
+        const adoptButtons = document.querySelectorAll('.btn-adopt');
+        const adoptionForm = document.getElementById('adoptionForm');
+        const dogNameInput = document.getElementById('dogName');
+
+        // Agregar evento a cada botón de adoptar
+        adoptButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Obtener el nombre del perro de la tarjeta
+                const dogCard = this.closest('.dog-card');
+                const dogName = dogCard.querySelector('.dog-info h3').textContent;
+                
+                // Establecer el nombre del perro en el formulario
+                dogNameInput.value = dogName;
+                
+                // Mostrar el modal
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Prevenir scroll
+            });
+        });
+
+        // Cerrar el modal al hacer clic en la X
+        closeBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+
+        // Cerrar el modal al hacer clic fuera de él
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Manejar el envío del formulario
+        adoptionForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Obtener los datos del formulario
+            const formData = new FormData(adoptionForm);
+            const data = Object.fromEntries(formData);
+            
+            // Aquí puedes enviar los datos a un servidor
+            console.log('Datos de adopción:', data);
+            
+            // Mostrar mensaje de éxito
+            alert(`¡Gracias por tu solicitud para adoptar a ${data.dogName}! Nos pondremos en contacto contigo pronto.`);
+            
+            // Cerrar el modal y resetear el formulario
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            adoptionForm.reset();
+        });
+    </script>
 </body>
 </html>
